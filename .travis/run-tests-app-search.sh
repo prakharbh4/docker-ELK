@@ -10,13 +10,13 @@ source "$(dirname ${BASH_SOURCE[0]})/lib/testing.sh"
 declare MODE=""
 
 log 'Waiting for readiness of Elasticsearch'
-poll_ready elasticsearch 'http://localhost:9200/' 'elastic:testpasswd'
+poll_ready elasticsearch 'http://localhost:9201/' 'elastic:testpasswd'
 
 log 'Waiting for readiness of App Search'
 poll_ready app-search 'http://localhost:3002/login' ':' quiet
 
 log 'Retrieving private key from Elasticsearch'
-response="$(curl 'http://localhost:9200/.app-search-actastic-loco_moco_api_tokens/_search?q=name:private-key' -s -u elastic:testpasswd)"
+response="$(curl 'http://localhost:9201/.app-search-actastic-loco_moco_api_tokens/_search?q=name:private-key' -s -u elastic:testpasswd)"
 hits="$(jq -rn --argjson data "${response}" '$data.hits.hits')"
 echo "$hits"
 count="$(jq -rn --argjson data "${response}" '$data.hits.total.value')"
